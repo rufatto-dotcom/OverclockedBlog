@@ -1,0 +1,236 @@
+/* POST LAYOUT */
+.post {
+padding: 2.75rem 1.75rem 2rem;
+flex: 1;
+min-width: 680px;
+max-width: 1200px;
+margin: auto;
+}
+.post-header {
+margin-bottom: 3rem;
+padding-bottom: 1.5rem;
+border-bottom: 1px solid var(--border);
+}
+.post-header .post-tag {
+font-size: 9px;
+padding: 2px 6px;
+border-radius: 3px;
+background: var(--tag-bg);
+color: var(--accent);
+border: 1px solid rgba(60,100,160,0.15);
+margin-right: 8px;
+}
+.post-header .post-date {
+font-size: 10px;
+color: var(--muted);
+}
+.post-header h1 {
+font-size: 20px;
+font-weight: 800;
+color: var(--title);
+margin-top: 1rem;
+line-height: 1.4;
+}
+/* ARTICLE — tudo que vem do markdown */
+article {
+display: flex;
+flex-direction: column;
+gap: 1.25rem;
+}
+article p {
+font-size: 13px;
+color: var(--text);
+line-height: 2;
+}
+/* HEADINGS */
+article h2 {
+font-size: 16px;
+font-weight: 700;
+color: var(--title);
+margin-top: 1rem;
+padding-bottom: 0.4rem;
+border-bottom: 1px solid var(--border);
+}
+article h3 {
+font-size: 14px;
+font-weight: 700;
+color: var(--title);
+}
+article h4 {
+font-size: 13px;
+font-weight: 700;
+color: var(--muted);
+}
+/* ÊNFASE */
+article strong {
+font-weight: 700;
+color: var(--title);
+}
+article em {
+font-style: italic;
+color: var(--text);
+}
+article del {
+color: var(--muted);
+}
+/* CÓDIGO INLINE */
+article code {
+font-family: "JetBrains Mono", monospace;
+font-size: 12px;
+color: var(--accent);
+background: rgba(40,80,130,0.15);
+padding: 1px 5px;
+border-radius: 3px;
+border: 1px solid rgba(60,100,160,0.15);
+}
+/* BLOCO DE CÓDIGO */
+article pre {
+background: var(--surface);
+border: 1px solid var(--border);
+border-radius: 6px;
+padding: 1.25rem;
+overflow-x: auto;
+}
+article pre code {
+background: none;
+border: none;
+padding: 0;
+font-size: 12px;
+color: var(--text);
+line-height: 1.9;
+}
+/* BLOCKQUOTE */
+article blockquote {
+border-left: 2px solid var(--accent-dim);
+padding: 0.5rem 0 0.5rem 1.25rem;
+}
+article blockquote p {
+color: var(--muted);
+font-style: italic;
+}
+/* LISTAS */
+article ul,
+article ol {
+padding-left: 1.5rem;
+display: flex;
+flex-direction: column;
+gap: 0.4rem;
+}
+article ul {
+list-style: none;
+}
+article ul li::before {
+content: '— ';
+color: var(--accent-dim);
+}
+article ol {
+list-style: decimal;
+}
+article li {
+font-size: 13px;
+color: var(--text);
+line-height: 1.8;
+}
+article ul ul {
+margin-top: 0.4rem;
+padding-left: 1.25rem;
+}
+/* LINK */
+article a {
+color: var(--accent);
+text-decoration: underline;
+text-underline-offset: 3px;
+transition: color 180ms;
+}
+article a:hover {
+color: var(--title);
+}
+/* IMAGEM */
+article figure {
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+}
+article img {
+width: 100%;
+border-radius: 6px;
+border: 1px solid var(--border);
+}
+article figcaption {
+font-size: 11px;
+color: var(--muted);
+text-align: center;
+}
+/* TABELA */
+article table {
+width: 100%;
+border-collapse: collapse;
+font-size: 12px;
+}
+article th {
+text-align: left;
+font-weight: 700;
+color: var(--title);
+padding: 8px 12px;
+border-bottom: 1px solid var(--accent-dim);
+}
+article td {
+color: var(--text);
+padding: 8px 12px;
+border-bottom: 1px solid var(--border);
+}
+/* DIVISOR */
+article hr {
+border: none;
+border-top: 1px solid var(--border);
+}
+/* NAVEGAÇÃO ENTRE POSTS */
+.post-nav {
+display: flex;
+justify-content: space-between;
+margin-top: 3rem;
+padding-top: 1.5rem;
+border-top: 1px solid var(--border);
+}
+.post-nav a {
+font-size: 11px;
+color: var(--muted);
+text-decoration: none;
+transition: color 180ms;
+}
+.post-nav a:hover {
+color: var(--accent);
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .post {
+        min-width: 0;
+        max-width: 100%;
+        padding: 2rem 1.25rem 1.5rem;
+    }
+
+    .post-header h1 {
+        font-size: 18px;
+    }
+
+    article pre {
+        padding: 1rem;
+    }
+
+    article table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .post-nav {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .post-nav-next {
+        text-align: left;
+    }
+}

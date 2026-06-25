@@ -1,0 +1,5 @@
+Análise honesta:
+O que funciona bem no mobile: a lista de posts sobrevive bem em tela pequena porque já é linear por natureza. O header com hamburger é o caminho certo — o nav atual com busca + links não cabe em 320px, vai precisar de um menu colapsável quando for pro celular de verdade. O post também lê bem porque é coluna única desde o início.
+Problema real de cor: no mobile fica mais evidente. O fundo #080d14 em tela pequena e com brilho reduzido de celular fica denso demais. A legibilidade do texto #bcc8d8 sobre esse fundo é tecnicamente boa em contraste, mas cansa rápido em leitura longa. Subir o fundo pra algo como #0d1520 e clarear o texto do corpo pra #cdd8e8 provavelmente resolve sem perder o tom escuro que você quer.
+Como portfólio: funciona. A fonte mono + paleta fria + índices numéricos nos posts transmite uma identidade técnica sem precisar dizer isso em nenhum lugar. É o tipo de coisa que um recrutador de dev abre e já entende o perfil antes de ler uma linha.
+O que eu arrumaria antes de mobile de verdade: o nav precisa de breakpoint — abaixo de ~600px colapsa num hamburger. É a única coisa estrutural que vai quebrar.

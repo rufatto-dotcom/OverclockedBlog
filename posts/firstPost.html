@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>como eu aprendi a não ter medo do malloc — OverClocked</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../post.css">
+</head>
+<body>
+
+    <header>
+        <span class="logo">OverClocked</span>
+
+        <nav>
+            <a href="../index.html">posts</a>
+            <a href="../about.html">sobre</a>
+            <a href="https://github.com/rufatto-dotcom">github</a>
+            <input type="text" placeholder="buscar">
+        </nav>
+    </header>
+
+    <main class="post">
+
+        <div class="post-header">
+            <span class="post-tag">C</span>
+            <span class="post-date">jun 2026</span>
+            <h1>como eu aprendi a não ter medo do malloc</h1>
+        </div>
+
+        <article>
+<h2>o problema com buffer[256]</h2>
+<p>eu comecei lendo arquivo com um <code>buffer[256]</code>, bem cru, bem hardcoded.</p>
+<pre><code class="lang-c">char buffer[256];</code></pre>
+<p>funciona, até o arquivo ter uma linha com 257 caracteres. nesse momento o programa simplesmente não vai ler tudo, e foi aí que eu fui obrigado a conhecer o maior inimigo de quem encara C de frente: alocação dinâmica.</p>
+<h2>heap, malloc e o medo que isso me deu</h2>
+<p>"malloc" é alocação de memória. é uma função pra pedir espaço dentro do "Heap", que é tipo um terreno baldio gigante que o sistema te dá, mas com uma pegadinha: você tem que lembrar de devolver esse espaço depois.</p>
+<p>se você esquecer, é o famoso memory leak: seu programa vai consumindo RAM até a máquina implorar misericórdia.</p>
+<p>ééééééééééé.... eu ainda não tratei isso no meu código (eu sei, eu sei), mas pelo menos já aplico a lógica certa pra guardar o conteúdo do arquivo.</p>
+<h2>guardando cada linha na memória</h2>
+<p>a ideia: primeiro eu conto quantas linhas o arquivo tem, sem fazer nada com elas ainda.</p>
+<pre><code class="lang-c">char buffer[256];
+int count = 0;
+
+while (fgets(buffer, sizeof(buffer), file_ptr) != NULL) {
+    count++;
+}
+
+rewind(file_ptr); // volta o "cursor" do arquivo pro início</code></pre>
+<p>com o número de linhas em mãos, eu aloco um array de ponteiros — <code>lines</code> — do tamanho certo:</p>
+<pre><code class="lang-c">char **lines = malloc(count * sizeof(char *));
+int i = 0;
+
+while (fgets(buffer, sizeof(buffer), file_ptr) != NULL) {
+    buffer[strcspn(buffer, "\n")] = '\0';
+    lines[i] = malloc(strlen(buffer) + 1);
+    strcpy(lines[i], buffer);
+    i++;
+}</code></pre>
+<p>a parte que mais me confundiu foi essa aqui:</p>
+<pre><code class="lang-c">buffer[strcspn(buffer, "\n")] = '\0';</code></pre>
+<p><code>strcspn</code> acha a posição do primeiro <code>\n</code> na linha, e eu troco esse caractere por <code>\0</code> (terminador nulo). na prática: <code>"hello\n"</code> vira <code>"hello"</code>. sem isso, cada linha guardada ia carregar a quebra de linha junto, o que é meio inútil.</p>
+<p>depois disso, pra cada linha: aloco espaço do tamanho exato dela (+1 por causa do <code>\0</code>), copio o conteúdo pra dentro de <code>lines[i]</code> e sigo pra próxima.</p>
+<p>resultado: um <code>teste.txt</code> desses</p>
+<pre><code>escrevendo texto para teste
+quebrando linha</code></pre>
+<p>vira isso na memória:</p>
+<pre><code>lines[0]: escrevendo texto para teste
+lines[1]: quebrando linha</code></pre>
+<p>cada linha, seu próprio espacinho na memória, do tamanho que ela realmente precisa. nada de desperdício, nada de hardcode.</p>
+<p>(o memory leak que eu disse que ainda não resolvi? fica pro próximo post)</p>
+        </article>
+
+        <nav class="post-nav">
+            <a href="#" class="post-nav-prev">
+                ← 
+            </a>
+
+            <a href="#" class="post-nav-next">
+                 →
+            </a>
+        </nav>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Gustavo Rufatto Gomes</p>
+
+        <div class="footer-links">
+            <a href="https://www.linkedin.com/in/gustavo-rufatto-095921340/">linkedin</a>
+            <a href="https://www.instagram.com/rufattostein/">instagram</a>
+        </div>
+    </footer>
+
+</body>
+</html>
