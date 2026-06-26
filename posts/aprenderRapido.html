@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como eu aprendi 5 linguagens de programação em 1 ano — OverClocked</title>
+
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../post.css">
+</head>
+<body>
+
+    <header>
+        <span class="logo">OverClocked</span>
+
+        <nav>
+            <a href="../index.html">posts</a>
+            <a href="../about.html">sobre</a>
+            <a href="https://github.com/rufatto-dotcom">github</a>
+            <input type="text" placeholder="buscar">
+        </nav>
+    </header>
+
+    <main class="post">
+
+        <div class="post-header">
+            <span class="post-tag">Leve</span>
+            <span class="post-date">jun 2026</span>
+            <h1>Como eu aprendi 5 linguagens de programação em 1 ano</h1>
+        </div>
+
+        <article>
+<h2>Como aprender qualquer coisa de forma rápida</h2>
+<p>Não é segredo pra todos que eu sou obcecado (talvez maluco) pela área da computação. Se somar todo o tempo de estudo que eu tenho, sentado com a bundinha na cadeira estudando, passa facilmente das 4.500 horas, quase 5.000 horas.</p>
+<ul>
+<li>Mas afinal de contas Rufatto, como isso te faz aprender rápido?</li>
+</ul>
+<p>Assim como tudo na vida, você jamais pode se contentar em saber fazer. É só isso, em vez de aprender como fazer o carro andar, pergunte-se depois, por que ele anda?</p>
+<p>Parece chatisse, mas é assim que você é capaz de aprender qualquer coisa. E digo mais, quanto mais você sabe o por que das coisas, mais rápido ainda você vai aprender o por que de outras.</p>
+<p>Pensa em alguém que decora a receita de bolo de cor — segue o passo a passo certinho, mas se faltar um ingrediente ou o forno for diferente, trava. Agora pensa em alguém que entende o que cada ingrediente faz (por que o fermento sobe, por que o ovo liga a massa). Essa pessoa improvisa, troca, conserta — porque ela não aprendeu "os passos", ela aprendeu "o porquê dos passos".</p>
+<h2>Que tal um exemplo na prática?</h2>
+<p>Veja, eu tenho um protótipo de Processador feito a mão com placas de teste. Sim, um Processador, aquele chip caro que vai no meio da sua placa mãe, feito por máquinas tão precisas que é impossível de enxergar os componentes<sup class="footnote-ref"><a href="#fn1" id="fnref1">1</a></sup>, isso por si só, me ensinou como a máquina pensa, sabe aquela máquina nada importante?</p>
+<ul>
+<li>O computador?</li>
+</ul>
+<p>Sim, é, só esse carinha ai que usamos todo dia pra quase tudo. Bom, todo Processador possui uma linguagem onde você é capaz de dar instruções pro sistema MANUALMENTE. Ja ouviu falar do "Assembly"<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup>, acredite ou não, a maioria das linguagens de programação do mercado, quando compiladas em um executável<sup class="footnote-ref"><a href="#fn3" id="fnref3">3</a></sup> de fato, simplesmente viram Assembly (Instruções diretas pro processador).</p>
+<ul>
+<li>Então, se tudo no fim das contas vira a mesma coisa, basta entender como funciona?</li>
+</ul>
+<p>Bom, vamos começar de cima, da camada mais "confortável", e ir descendo até chegar no metal de verdade. PHP é um bom ponto de partida porque grande parte da web ainda roda escondida atrás dele:</p>
+<pre><code class="lang-PHP">&lt;?php
+
+fwrite(STDOUT, "Mensagem no Terminal" . PHP_EOL);</code></pre>
+<p>Esta linha de código, vai ser COMPILADA (explico em outro post como funciona a compilação de um código) e quando executado, vai imprimir "Mensagem no Terminal" no terminal</p>
+<p>O mesmo recado, em Python, fica ainda mais curto — é praticamente a frase em português, só com parênteses:</p>
+<pre><code class="lang-Python">print("Mensagem no Terminal")</code></pre>
+<p>Faz a exata mesma coisa, só muda a forma como escrevi, engraçado não? Agora repara como o Java já exige um pouco mais de "burocracia" antes de chegar no que realmente importa:</p>
+<pre><code class="lang-JAVA">public class Main {
+    public static void main(String args[]) {
+        System.out.println("Mensagem no terminal")
+    }
+}</code></pre>
+<p>JAVA parece pior, mas é só por quê ele exige que o programa seja executado dentro de uma classe main (Dedicarei um blog só pra isso, é um assunto muito legal). Mas vamos saindo da nuvem e descendo pro chão — C já te deixa bem mais perto do hardware, sem tanta camada de proteção no meio do caminho:</p>
+<pre><code class="lang-C">#include &lt;stdio.h&gt;
+
+int main(void) {
+    printf("Mensagem no terminal")
+
+    return 0
+}</code></pre>
+<p>Sinceramente, posso passar o dia aqui escrevendo. Mas tenham em mente que todos esses exemplos, no fim, executam a mesma coisa — e aqui embaixo de tudo, sem mais nenhuma camada pra descer, é onde a viagem termina:</p>
+<pre><code class="lang-Assembly">section .data
+    msg db "Mensagem no Terminal", 0xa
+    msg_len equ $ - msg
+
+section .text
+    global _start
+
+_start:
+    mov rax, 1          ; syscall número 1 = write
+    mov rdi, 1          ; primeiro argumento: fd 1 = stdout
+    mov rsi, msg        ; segundo argumento: endereço da string
+    mov rdx, msg_len    ; terceiro argumento: quantos bytes escrever
+    syscall
+
+    mov rax, 60         ; syscall número 60 = exit
+    mov rdi, 0          ; código de saída 0
+    syscall</code></pre>
+<p>Esse último <code>syscall</code><sup class="footnote-ref"><a href="#fn4" id="fnref4">4</a></sup> é o que efetivamente fecha o programa.</p>
+<p>E essa é a parte mais bonita disso tudo: programa não tem sotaque, programa só tem uma fala.</p>
+<p>Assim como na vida real, se você souber falar 10 línguas, você ainda vai estar falando a mesma coisa, a mesma frase, só muda como você pronuncia<sup class="footnote-ref"><a href="#fn5" id="fnref5">5</a></sup>. Um bom programador é aquele que escolhe falar Russo com Russos, e não escolhe falar só Inglês porque é "confortável".</p>
+<h2>Mas e as ferramentas do mercado? E em outras áreas?</h2>
+<p>Não entendeu ainda? Pergunte</p>
+<ul>
+<li>Pra você?</li>
+</ul>
+<p>Não pra mim, pra quem está te ensinando, pesquise na IA, pesquise no Google, questione o por quê das coisas serem como são, garanto que quando você entender o porque as coisas são como são, o resto se desenrola facilmente.</p>
+<p>Vejo vocês na proxima! PS: Espero que tenha ficado bom as mensagens no rodapé, tentei pegar um assunto mais divertido</p>
+<section class="footnotes">
+<hr>
+<ol>
+<li id="fn1">Componentes são peças que se conectam em um eletrônico e tem algum tipo de função quando recebem energia <a href="#fnref1" class="footnote-back">↩</a></li>
+<li id="fn2">Linguagem de programação de baixo nível que representa diretamente as instruções nativas de um processador <a href="#fnref2" class="footnote-back">↩</a></li>
+<li id="fn3">Executável é o arquivo final que o sistema operacional consegue rodar diretamente, sem precisar de mais nenhuma tradução <a href="#fnref3" class="footnote-back">↩</a></li>
+<li id="fn4">Syscall é um pedido direto pro sistema operacional fazer algo que o programa não pode fazer por conta própria, como escrever na tela <a href="#fnref4" class="footnote-back">↩</a></li>
+<li id="fn5">Pronunciar aqui no sentido de sintaxe — a regra de como você escreve aquilo que quer dizer <a href="#fnref5" class="footnote-back">↩</a></li>
+</ol>
+</section>
+        </article>
+
+        <nav class="post-nav">
+            <a href="firstPost.html" class="post-nav-prev">
+                ← 
+            </a>
+
+            <a href="#" class="post-nav-next">
+                 →
+            </a>
+        </nav>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Gustavo Rufatto Gomes</p>
+
+        <div class="footer-links">
+            <a href="https://www.linkedin.com/in/gustavo-rufatto-095921340/">linkedin</a>
+            <a href="https://www.instagram.com/rufattostein/">instagram</a>
+        </div>
+    </footer>
+
+</body>
+</html>

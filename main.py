@@ -1,8 +1,8 @@
 from md_parser import MdParser
 from html_renderer import HtmlRenderer
 
-markdown = 'firstPost'
-postFileName = 'firstPost'
+markdown = 'PorqueProgramar'
+postFileName = 'aprenderRapido'
 
 def main():
     parser = MdParser()

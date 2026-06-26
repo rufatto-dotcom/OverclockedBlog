@@ -5,11 +5,20 @@ class HtmlRenderer:
     """Transforma a lista de elementos do MdParser numa string HTML."""
 
     def render(self, elements):
-        return "\n".join(self._render_element(el) for el in elements)
+        # estado por-render: zera a cada chamada, porque a numeração das
+        # notas tem que ser global pro artigo inteiro, não por parágrafo
+        self.footnotes = []
+        self.footnote_counter = 0
+
+        body = "\n".join(self._render_element(el) for el in elements)
+
+        if self.footnotes:
+            body += "\n" + self._render_footnotes()
+
+        return body
 
     def _render_element(self, el):
         t = el["type"]
-
         if t == "h1":
             return f"<h1>{self._inline(el['content'])}</h1>"
         if t == "h2":
@@ -32,7 +41,6 @@ class HtmlRenderer:
             return self._render_table(el)
         if t in ("ul", "ol"):
             return self._render_list(el)
-
         return ""
 
     def _render_code(self, el):
@@ -81,14 +89,51 @@ class HtmlRenderer:
         items_str = "\n".join(items_html)
         return f"<{tag}>\n{items_str}\n</{tag}>"
 
+    # ---------- notas de rodapé ----------
+    # sintaxe no markdown: termo^[explicação do termo aqui]
+    # gera um número clicável no texto e guarda o conteúdo pra
+    # renderizar a lista de notas no final do artigo
+
+    def _render_footnotes(self):
+        items = "\n".join(
+            f'<li id="fn{i}">{text} '
+            f'<a href="#fnref{i}" class="footnote-back">↩</a></li>'
+            for i, text in enumerate(self.footnotes, start=1)
+        )
+        return (
+            '<section class="footnotes">\n'
+            "<hr>\n"
+            "<ol>\n"
+            f"{items}\n"
+            "</ol>\n"
+            "</section>"
+        )
+
+    def _footnote_sub(self, match):
+        self.footnote_counter += 1
+        n = self.footnote_counter
+        # formatação básica (negrito, código etc) é permitida dentro
+        # da nota, mas não outra nota de rodapé aninhada
+        self.footnotes.append(self._inline_basic(match.group(1)))
+        return (
+            '<sup class="footnote-ref">'
+            f'<a href="#fn{n}" id="fnref{n}">{n}</a>'
+            "</sup>"
+        )
+
     # ---------- formatação inline ----------
     # roda dentro de qualquer texto: parágrafo, item de lista, célula de
     # tabela, legenda de imagem, etc.
 
-    def _inline(self, text):
+    def _inline_basic(self, text):
         text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
         text = re.sub(r"\*(.+?)\*", r"<em>\1</em>", text)
         text = re.sub(r"~~(.+?)~~", r"<del>\1</del>", text)
         text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
         text = re.sub(r"\[(.+?)\]\((.+?)\)", r'<a href="\2">\1</a>', text)
+        return text
+
+    def _inline(self, text):
+        text = self._inline_basic(text)
+        text = re.sub(r"\^\[(.+?)\]", self._footnote_sub, text)
         return text

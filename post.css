@@ -202,6 +202,51 @@ transition: color 180ms;
 color: var(--accent);
 }
 
+/* NOTAS DE RODAPÉ */
+article sup.footnote-ref {
+    line-height: 0;
+}
+article sup.footnote-ref a {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 0 2px;
+}
+article sup.footnote-ref a:hover {
+    color: var(--title);
+}
+.footnotes {
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+.footnotes ol {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-left: 1.25rem;
+}
+.footnotes li {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+    scroll-margin-top: 80px; /* evita a nota ficar escondida atrás do header, se ele for fixo */
+}
+.footnotes li::marker {
+    color: var(--accent-dim);
+    font-size: 11px;
+}
+.footnote-back {
+    color: var(--accent-dim);
+    text-decoration: none;
+    margin-left: 4px;
+    font-size: 11px;
+}
+.footnote-back:hover {
+    color: var(--accent);
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
     .post {
@@ -232,5 +277,18 @@ color: var(--accent);
 
     .post-nav-next {
         text-align: left;
+    }
+
+    article sup.footnote-ref a {
+        padding: 8px 6px;
+        margin: -8px -6px;
+    }
+    .footnotes li {
+        font-size: 12.5px;
+    }
+    .footnote-back {
+        display: inline-block;
+        padding: 8px 6px;
+        margin: -8px -6px;
     }
 }
